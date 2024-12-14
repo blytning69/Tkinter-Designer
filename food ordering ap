@@ -1,0 +1,181 @@
+import tkinter as tk
+from tkinter import Toplevel
+from tkinter import messagebox
+
+total_harga = [0]  
+pesanan = []  
+
+lebar = 600
+tinggi = 700
+window = tk.Tk()
+window.title("Rumah Makan Cinto Bundo!")
+
+screenwidth = window.winfo_screenwidth()
+screenheight = window.winfo_screenheight()
+
+newx = int((screenwidth / 2) - (lebar / 2))
+newy = int((screenheight / 2) - (tinggi / 2))
+window.geometry(f"{lebar}x{tinggi}+{newx}+{newy}")
+opening = tk.Label(window, text="Selamat Datang di Rumah Makan Cinto Bundo!", font=("Arial", 16), fg="blue")
+opening.pack(pady=10)
+
+label_total_harga = tk.Label(window, text=f"Total Harga: Rp{total_harga[0]}", font=("Arial", 14), fg="red")
+label_total_harga.pack(pady=5)
+
+
+def update_total_harga():
+    label_total_harga.config(text=f"Total Harga: Rp{total_harga[0]}")
+
+
+def window_Menu_Makanan():
+    Menu_Makanan = {"Ayam Goreng": 8000, "Ayam Bakar": 8000, "Ayam Gulai": 12000, "Ayam Pop": 15000,"Dendeng Balado": 20000, "Gulai Tunjang": 15000, "Gulai Kepala Ikan": 25000,"Perkedel Kentang": 5000, "Telur Dadar": 8000}
+    window_makanan = Toplevel(window)
+    window_makanan.title("Menu Makanan")
+    window_makanan.geometry("600x600")
+
+    def tambah_pesanan_makanan(menu, harga):
+        total_harga[0] += harga
+        pesanan.append(f"{menu} - Rp{harga}")
+        update_total_harga()  
+
+    title_judul_makanan = tk.Label(window_makanan, text="Daftar Menu Makanan", font=("Arial", 16))
+    title_judul_makanan.pack(pady=5)
+
+    for makanan, harga in Menu_Makanan.items():
+        btn_menu_makanan = tk.Button(
+            window_makanan, text=f"{makanan} - Rp{harga}", font=("Arial", 12),
+            command=lambda m=makanan, h=harga: tambah_pesanan_makanan(m, h)
+        )
+        btn_menu_makanan.pack(pady=5)
+
+
+def window_Menu_Minuman():
+    Menu_Minuman = {"Es Teh Manis": 2500, "Es Teh Tawar": 2500, "Kopi Hitam": 3000, "Kopi Susu": 5000,"Es Jeruk": 8000, "Es Tebu": 10000, "Jus Alpukat": 12000, "Jus Jeruk": 10000, "Jus Mangga": 12000}
+    window_minuman = Toplevel(window)
+    window_minuman.title("Menu Minuman")
+    window_minuman.geometry("600x600")
+
+    def tambah_pesanan_minuman(menu, harga):
+        total_harga[0] += harga
+        pesanan.append(f"{menu} - Rp{harga}")
+        update_total_harga() 
+
+    title_judul_minuman = tk.Label(window_minuman, text="Daftar Menu Minuman", font=("Arial", 16))
+    title_judul_minuman.pack(pady=5)
+
+    for minuman, harga in Menu_Minuman.items():
+        btn_menu_minuman = tk.Button(
+            window_minuman, text=f"{minuman} - Rp{harga}", font=("Arial", 12),
+            command=lambda m=minuman, h=harga: tambah_pesanan_minuman(m, h)
+        )
+        btn_menu_minuman.pack(pady=5)
+def Window_Menu_Tambahan():
+    Menu_Tambahan = {"Daun Singkong" : 1500, "Sambal Merah" : 1500, "Sambal Hijau" : 2000, "Serundeng" : 2000, "Kuah Rendang" : 2500}
+    window_tambahan = Toplevel(window)
+    window_tambahan.title("Menu Tambahan")
+    window_tambahan.geometry("600x600")
+
+    def tambah_pesanan_tambahan(menu, harga):
+        total_harga[0]+= harga
+        pesanan.append(f"{menu} - Rp{harga}")
+        update_total_harga()
+
+    title_judul_tambahan = tk.Label(window_tambahan, text="Daftar Menu Tambahan", font=("Arial", 16))
+    title_judul_tambahan.pack(pady=10)
+
+    for tambahan, harga in Menu_Tambahan.items():
+        btn_menu_tambahan = tk.Button(window_tambahan, text=f"{tambahan} - Rp{harga}", font=("Arial", 12), command= lambda t=tambahan, h=harga:tambah_pesanan_tambahan(t,h))
+        btn_menu_tambahan.pack(pady=5)
+
+def window_Rincian_Pemesanan():
+    window_rincian_pesanan = Toplevel(window)
+    window_rincian_pesanan.title("Rincian Pesanan")
+    window_rincian_pesanan.geometry("600x600")
+
+    label_total_harga_rincian = tk.Label(
+        window_rincian_pesanan, text=f"Total Harga: Rp{total_harga[0]}", font=("Arial", 14), fg="red")
+    label_total_harga_rincian.pack(pady=10)
+
+    if pesanan:
+        daftar_pesanan = "\n".join(pesanan)
+        label_daftar_pesanan = tk.Label(
+            window_rincian_pesanan, 
+            text=f"Pesanan:\n{daftar_pesanan}\n\nJumlah Pesanan: {len(pesanan)}",font=("Arial", 12), justify="left")
+    else:
+        label_daftar_pesanan = tk.Label(
+            window_rincian_pesanan, 
+            text="Pesanan: Belum ada",font=("Arial", 12), fg="gray")
+    label_daftar_pesanan.pack(pady=10)
+
+
+
+def nama_pelanggan():
+    teks = Nama.get()
+    print(f"Nama : {teks}")
+    label_hasil.config(text=f"Teks disimpan: {teks}")
+
+def reset_pesanan():
+    total_harga[0] = 0
+    pesanan.clear()
+    update_total_harga()
+    tk.messagebox.showinfo("Reset", "Semua pesanan dan total harga telah dihapus!")
+
+def pembayaran():
+    window_pembayaran = Toplevel(window)
+    window_pembayaran.title("Menu Pembayaran")
+    window_pembayaran.geometry("600x600")
+
+    title_judul_pembayaran = tk.Label(window_pembayaran, text="Pilih Metode Pembayaran!", font=("Arial", 16))
+    title_judul_pembayaran.pack(pady=5)
+    
+    def kartu_kredit():
+        tk.messagebox.showinfo("Terimakasih Telah Membeli Di Rumah Makan Cinto Bundo", "Silahkan Bayar di Kasir!")
+    
+    def transfer_bank():
+        tk.messagebox.showinfo("kontol","belum ada apa apa")
+
+    btn_kartu_kredit = tk.Button(window_pembayaran, text="Kartu Kredit", command=kartu_kredit)
+    btn_kartu_kredit.pack(pady=5)
+
+    btn_transfer_bank = tk.Button(window_pembayaran, text="Transfer Bank", command=transfer_bank)
+    btn_transfer_bank.pack(pady=5)
+
+    btn_E_wallet = tk.Button(window_pembayaran, text="E-Wallet")
+    btn_E_wallet.pack(pady=5)
+
+    btn_Tunai = tk.Button(window_pembayaran,text = "Tunai" )
+    btn_Tunai.pack(pady=5)
+
+    
+
+
+Nama = tk.StringVar()
+entry_box = tk.Entry(window, textvariable=Nama, width=30)
+entry_box.pack(pady=10)
+
+btn_simpan_nama = tk.Button(window, text="Simpan Nama", command=nama_pelanggan)
+btn_simpan_nama.pack(pady=5)
+
+label_hasil = tk.Label(window, text="Nama disimpan : ")
+label_hasil.pack(pady=5)
+
+
+tombol_buka_Menu_Makanan = tk.Button(window, text="Menu Makanan", command=window_Menu_Makanan)
+tombol_buka_Menu_Makanan.pack(pady=5)
+
+tombol_buka_Menu_Minuman = tk.Button(window, text="Menu Minuman", command=window_Menu_Minuman)
+tombol_buka_Menu_Minuman.pack(pady=5)
+
+tombol_buka_Menu_Tambahan = tk.Button(window, text="Menu Tambahan", command=Window_Menu_Tambahan)
+tombol_buka_Menu_Tambahan.pack(pady=5)
+
+tombol_Rincian_Pemesanan = tk.Button(window, text="Rincian Pemesanan", command=window_Rincian_Pemesanan )
+tombol_Rincian_Pemesanan.pack(pady=5)
+
+tombol_pembayaran = tk.Button(window, text="Pembayaran",command=pembayaran)
+tombol_pembayaran.pack(pady=5)
+
+tombol_refresh = tk.Button(window,text="Refresh Pesanan", command=reset_pesanan, bg="red", fg="white", font=("Arial", 12))
+tombol_refresh.pack(pady=5)
+
+window.mainloop()
